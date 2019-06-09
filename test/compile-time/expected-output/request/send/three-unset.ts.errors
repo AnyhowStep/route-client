@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "The 'this' context of type 'import(\"/home/anyhowstep/node-projects/route-client/dist/request/request\").Request<{ readonly route: import(\"/home/anyhowstep/node-projects/route-client/node_modules/route-declaration/dist/route/route\").Route<{ readonly method: import(\"/home/anyhowstep/node-projects/route-client/node_modules/route-declaration/dist/r...' is not assignable to method's 'this' of type 'import(\"/home/anyhowstep/node-projects/route-client/dist/request/request\").Request<{ readonly route: import(\"/home/anyhowstep/node-projects/route-client/node_modules/route-declaration/dist/route/route\").Route<{ readonly method: import(\"/home/anyhowstep/node-projects/route-client/node_modules/route-declaration/dist/r...'.",
+      "category": 1,
+      "code": 2684,
+      "next": {
+        "messageText": "Type 'Request<{ readonly route: Route<{ readonly method: Method.Contextual; readonly path: Path<\"birdId\">; readonly param: Mapper<unknown, { birdId: bigint; }> & ExpectedInput<{ birdId: bigint; }> & MappableInput<{ birdId: string | number | bigint; }>; readonly query: Mapper<...> & ... 1 more ... & MappableInput<...>; rea...' is not assignable to type '[\"Cannot .send(); call\", \".setParam()\" | \".setQuery()\" | \".setBody()\", \"first\"]'.",
+        "category": 1,
+        "code": 2322
+      }
+    },
+    "code": 2684,
+    "category": 1,
+    "length": 773,
+    "start": 151
+  }
+]

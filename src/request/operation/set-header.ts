@@ -9,7 +9,7 @@ export type SetHeader<
         readonly route  : DataT["route"];
         readonly sender : DataT["sender"];
 
-        readonly param  : DataT["header"];
+        readonly param  : DataT["param"];
         readonly query  : DataT["query"];
         readonly body   : DataT["body"];
         readonly header : HeaderT;

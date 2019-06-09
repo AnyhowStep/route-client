@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "The 'this' context of type 'Request<{ readonly route: Route<{ readonly method: Method.Contextual; readonly path: Path<\"treeId\">; readonly param: Mapper<unknown, { treeId: bigint; }> & ExpectedInput<{ treeId: bigint; }> & MappableInput<{ treeId: string | number | bigint; }>; readonly query: undefined; readonly body: undefined; readonly header: ...' is not assignable to method's 'this' of type '[\"Cannot call .getPath() before .setParam()\"]'.",
+    "code": 2684,
+    "category": 1,
+    "length": 189,
+    "start": 145
+  }
+]

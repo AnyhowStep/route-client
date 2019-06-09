@@ -4,35 +4,42 @@ import {SendResultOf, getPath} from "../query";
 import {SendConfig} from "../../sender";
 import {isHttpStatusCode2xx, HttpStatusCodeNon2xx} from "../../http-status-code";
 
+export type MissingSetCalls<DataT extends RequestData> = (
+    | (
+        rd.RouteUtil.ClientExpectedParam<DataT["route"]> extends never ?
+        never :
+        DataT["param"] extends rd.RouteUtil.ClientExpectedParam<DataT["route"]> ?
+        never :
+        ".setParam()"
+    )
+    | (
+        rd.RouteUtil.ClientExpectedQuery<DataT["route"]> extends never ?
+        never :
+        DataT["query"] extends rd.RouteUtil.ClientExpectedQuery<DataT["route"]> ?
+        never :
+        ".setQuery()"
+    )
+    | (
+        rd.RouteUtil.ClientExpectedBody<DataT["route"]> extends never ?
+        never :
+        DataT["body"] extends rd.RouteUtil.ClientExpectedBody<DataT["route"]> ?
+        never :
+        ".setBody()"
+    )
+    | (
+        rd.RouteUtil.ClientExpectedHeader<DataT["route"]> extends never ?
+        never :
+        DataT["header"] extends rd.RouteUtil.ClientExpectedHeader<DataT["route"]> ?
+        never :
+        ".setHeader()"
+    )
+);
 export type AssertCanSend<DataT extends RequestData> = (
     & DataT
     & (
-        rd.RouteUtil.ClientExpectedParam<DataT["route"]> extends never ?
+        MissingSetCalls<DataT> extends never ?
         unknown :
-        DataT["param"] extends rd.RouteUtil.ClientExpectedParam<DataT["route"]> ?
-        unknown :
-        ["Cannot .send(); call .setParam() first"]
-    )
-    & (
-        rd.RouteUtil.ClientExpectedQuery<DataT["route"]> extends never ?
-        unknown :
-        DataT["query"] extends rd.RouteUtil.ClientExpectedQuery<DataT["route"]> ?
-        unknown :
-        ["Cannot .send(); call .setQuery() first"]
-    )
-    & (
-        rd.RouteUtil.ClientExpectedBody<DataT["route"]> extends never ?
-        unknown :
-        DataT["body"] extends rd.RouteUtil.ClientExpectedBody<DataT["route"]> ?
-        unknown :
-        ["Cannot .send(); call .setBody() first"]
-    )
-    & (
-        rd.RouteUtil.ClientExpectedHeader<DataT["route"]> extends never ?
-        unknown :
-        DataT["header"] extends rd.RouteUtil.ClientExpectedHeader<DataT["route"]> ?
-        unknown :
-        ["Cannot .send(); call .setHeader() first"]
+        ["Cannot .send(); call", MissingSetCalls<DataT>, "first"]
     )
 );
 export async function send<DataT extends RequestData> (data : DataT) : Promise<SendResultOf<DataT>> {
