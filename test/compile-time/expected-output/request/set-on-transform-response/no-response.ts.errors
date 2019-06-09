@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '(_sendResult: SendResult, _req: { readonly route: Route<DefaultRouteData>; readonly sender: ISender; readonly param: never; readonly query: never; readonly body: never; readonly header: never; }) => { ...; }' is not assignable to parameter of type 'TransformResponseDelegate<{ readonly route: Route<DefaultRouteData>; readonly sender: ISender; readonly param: undefined; readonly query: undefined; readonly body: undefined; readonly header: undefined; readonly non2xxDelegates: {}; readonly onTransformBody: undefined; readonly onInjectHeader: undefined; readonly on...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type '{ readonly amazing: true; }' is missing the following properties from type 'Promise<never>': then, catch, [Symbol.toStringTag], finally",
+        "category": 1,
+        "code": 2739
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 24,
+    "start": 275
+  }
+]

@@ -17,4 +17,4 @@ export const req = client.request(
     return {
         amazing : false,
     } as const;
-});;
+});

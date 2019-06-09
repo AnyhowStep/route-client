@@ -1,0 +1,23 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '(_sendResult: SendResult, _req: { readonly route: Route<{ readonly method: Method.Contextual; readonly path: Path<never>; readonly param: undefined; readonly query: undefined; readonly body: undefined; readonly header: undefined; readonly response: Mapper<...> & ... 1 more ... & MappableInput<...>; }>; ... 4 more .....' is not assignable to parameter of type 'TransformResponseDelegate<{ readonly route: Route<{ readonly method: Method.Contextual; readonly path: Path<never>; readonly param: undefined; readonly query: undefined; readonly body: undefined; readonly header: undefined; readonly response: Mapper<...> & ... 1 more ... & MappableInput<...>; }>; ... 8 more ...; rea...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type '{ readonly amazing: true; }' is not assignable to type '{ food: \"Apple\" | \"Orange\" | \"Pear\" | \"Banana\"; ingredientId: string | number | bigint; } | Promise<{ food: \"Apple\" | \"Orange\" | \"Pear\" | \"Banana\"; ingredientId: string | number | bigint; }>'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Type '{ readonly amazing: true; }' is missing the following properties from type 'Promise<{ food: \"Apple\" | \"Orange\" | \"Pear\" | \"Banana\"; ingredientId: string | number | bigint; }>': then, catch, [Symbol.toStringTag], finally",
+          "category": 1,
+          "code": 2739
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 24,
+    "start": 452
+  }
+]
