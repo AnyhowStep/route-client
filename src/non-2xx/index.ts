@@ -1,5 +1,6 @@
 import {SendResult} from "../sender";
 import {HttpStatusCodeNon2xx, HttpStatusCode2xx} from "../http-status-code";
+import {SyncReturnType} from "../sync-return-type";
 
 export interface Non2xxDelegate {
     //May return a promise, or non-promise
@@ -13,9 +14,7 @@ export type Non2xxDelegateMap = (
 
 export namespace Non2xxUtil {
     export type ResponseOf<DelegateT extends Non2xxDelegate> = (
-        ReturnType<DelegateT> extends PromiseLike<infer T> ?
-        T :
-        ReturnType<DelegateT>
+        SyncReturnType<DelegateT>
     );
     export type SendResultOf<MapT extends Non2xxDelegateMap> = (
         {
