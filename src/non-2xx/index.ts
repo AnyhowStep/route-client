@@ -1,5 +1,5 @@
 import {SendResult} from "../sender";
-import {HttpStatusCodeNon2xx} from "../http-status-code";
+import {HttpStatusCodeNon2xx, HttpStatusCode2xx} from "../http-status-code";
 
 export interface Non2xxDelegate {
     //May return a promise, or non-promise
@@ -19,15 +19,25 @@ export namespace Non2xxUtil {
     );
     export type SendResultOf<MapT extends Non2xxDelegateMap> = (
         {
-            [status in Extract<keyof MapT, HttpStatusCodeNon2xx>] : (
-                & SendResult
-                & {
-                    status : Extract<HttpStatusCodeNon2xx, status>|status,
-                    responseBody : ResponseOf<Extract<MapT[status], Non2xxDelegate>>,
-                }
+            [status in keyof MapT] : (
+                Extract<HttpStatusCode2xx, status> extends never ?
+                (
+                    MapT[status] extends Non2xxDelegate ?
+                    (
+                        & SendResult
+                        & {
+                            status : Extract<HttpStatusCodeNon2xx, status>|status,
+                            responseBody : Non2xxUtil.ResponseOf<Extract<MapT[status], Non2xxDelegate>>,
+                        }
+                    ) :
+                    never
+                ) :
+                never
             )
-        }[Extract<keyof MapT, HttpStatusCodeNon2xx>]
+        }[keyof MapT]
     );
+    //https://github.com/microsoft/TypeScript/issues/31834
+    /*
     export type SetDelegate<
         MapT extends Non2xxDelegateMap,
         StatusT extends HttpStatusCodeNon2xx,
@@ -37,6 +47,25 @@ export namespace Non2xxUtil {
             [status in (keyof MapT)|StatusT] : (
                 status extends StatusT ?
                 DelegateT :
+                MapT[status]
+            )
+        }
+    );
+    //*/
+    export type SetDelegate<
+        MapT extends Non2xxDelegateMap,
+        StatusT extends HttpStatusCodeNon2xx,
+        DelegateT extends Non2xxDelegate
+    > = (
+        {
+            [status in (keyof MapT)|StatusT] : (
+                status extends StatusT ?
+                //https://github.com/microsoft/TypeScript/issues/31834
+                (
+                    StatusT extends status ?
+                    DelegateT :
+                    MapT[status]
+                ) :
                 MapT[status]
             )
         }

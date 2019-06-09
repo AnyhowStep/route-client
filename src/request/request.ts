@@ -7,6 +7,7 @@ import {
     SetQuery, setQuery,
     SetBody, setBody,
     SetHeader, setHeader,
+    AssertHttpStatusCodeNon2xx,
     On, on,
     SetOnTransformBody, setOnTransformBody,
     SetOnInjectHeader, setOnInjectHeader,
@@ -163,10 +164,10 @@ export class Request<DataT extends RequestData> {
         StatusT extends HttpStatusCodeNon2xx,
         DelegateT extends Non2xxDelegate
     > (
-        status : StatusT,
+        status : AssertHttpStatusCodeNon2xx<StatusT>,
         delegate : DelegateT
     ) : Request<On<DataT, StatusT, DelegateT>> {
-        return new Request(on(this, status, delegate));
+        return new Request(on(this, status as StatusT, delegate));
     }
 
     setOnTransformBody<OnTransformBodyT extends TransformBodyDelegate<DataT>> (

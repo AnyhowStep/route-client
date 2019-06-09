@@ -1,5 +1,5 @@
 import {RequestData} from "../request";
-import {HttpStatusCodeNon2xx} from "../../http-status-code";
+import {HttpStatusCodeNon2xx, isHttpStatusCodeNon2xx} from "../../http-status-code";
 import {Non2xxDelegate, Non2xxUtil} from "../../non-2xx";
 
 export type On<
@@ -23,6 +23,11 @@ export type On<
         readonly onTransformResponse : DataT["onTransformResponse"];
     }
 );
+export type AssertHttpStatusCodeNon2xx<StatusT extends HttpStatusCodeNon2xx> = (
+    Extract<HttpStatusCodeNon2xx, StatusT> extends never ?
+    [StatusT, "is not a valid non-2xx http status code"] :
+    StatusT
+);
 export function on<
     DataT extends RequestData,
     StatusT extends HttpStatusCodeNon2xx,
@@ -32,6 +37,9 @@ export function on<
     status : StatusT,
     delegate : DelegateT
 ) : On<DataT, StatusT, DelegateT> {
+    if (!isHttpStatusCodeNon2xx(status)) {
+        throw new Error(`${status} is not a valid non-2xx http status code`);
+    }
     return {
         ...data,
         non2xxDelegates : Non2xxUtil.setDelegate(

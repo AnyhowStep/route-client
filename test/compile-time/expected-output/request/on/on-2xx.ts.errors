@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "Argument of type '200' is not assignable to parameter of type '[200, \"is not a valid non-2xx http status code\"]'.",
+    "code": 2345,
+    "category": 1,
+    "length": 3,
+    "start": 300
+  }
+]
