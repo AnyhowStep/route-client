@@ -1,0 +1,32 @@
+[
+  {
+    "messageText": "Argument of type 'null' is not assignable to parameter of type '{ gadgetId: bigint; }'.",
+    "code": 2345,
+    "category": 1,
+    "length": 4,
+    "start": 297
+  },
+  {
+    "messageText": "Type 'string' is not assignable to type 'bigint'.",
+    "code": 2322,
+    "category": 1,
+    "length": 8,
+    "start": 483
+  },
+  {
+    "messageText": {
+      "messageText": "Argument of type '{ gadgetId2: string; }' is not assignable to parameter of type '{ gadgetId: bigint; }'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Object literal may only specify known properties, but 'gadgetId2' does not exist in type '{ gadgetId: bigint; }'. Did you mean to write 'gadgetId'?",
+        "category": 1,
+        "code": 2561
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 15,
+    "start": 681
+  }
+]
