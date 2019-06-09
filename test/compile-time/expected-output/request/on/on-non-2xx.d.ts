@@ -31,12 +31,12 @@ export declare const req: client.Request<{
     readonly onTransformResponse: undefined;
 }>;
 export declare const sendResult: Promise<(client.SendResult & {
-    status: client.HttpStatusCode2xx;
+    status: 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226;
     responseBody: {
         description: string;
     };
 }) | (client.SendResult & {
-    status: client.HttpStatusCodeNon2xx.NOT_FOUND | 404;
+    status: 404;
     responseBody: {
         readonly message: "Not found";
     };

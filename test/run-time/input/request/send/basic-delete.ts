@@ -11,31 +11,27 @@ const fields = tm.fields({
     name : tm.mysql.varChar(),
     wateredAt : tm.mysql.dateTime(3),
 });
-const flower = tm.object(fields);
 const FlowerApi = toAxiosApi({
-    create : route()
+    delete : route()
+        .setMethod("DELETE")
         .append("/flower")
-        .setBody(tm.object(
-            fields.name,
-            fields.wateredAt,
-        ))
-        .setResponse(flower),
+        .appendParam("flowerId", /\d+/)
+        .setParam(tm.object(
+            fields.flowerId
+        )),
 });
 tape(__filename, async (t) => {
     const port = 9742;
     const server = await new Promise<http.Server>((resolve) => {
         const app = express();
         app.use(express.json());
-        app.post("/flower", (req, res) => {
-            const body = FlowerApi.routes.create.body("req.body", req.body);
-            res.setHeader("hello", "world");
-            res.json(flower.mapMappable(
-                "response",
-                {
-                    flowerId : 17,
-                    ...body,
-                }
-            ));
+        app.delete("/flower/:flowerId(\\d+)", (req, res) => {
+            const flowerId = fields.flowerId("req.params.flowerId", req.params.flowerId);
+            if (flowerId == BigInt(404)) {
+                res.status(404).end();
+            } else {
+                res.status(204).end();
+            }
         });
         const server = http.createServer(app).listen(port, () => {
             resolve(server);
@@ -46,17 +42,15 @@ tape(__filename, async (t) => {
         domain : `http://localhost:${port}`,
     });
 
-    const body = {
-        name : "Orchid",
-        wateredAt : new Date(),
-    };
-    const result = await flowerApi.create()
-        .setBody(body)
+    const result = await flowerApi.delete()
+        .setParam({
+            flowerId : BigInt(4),
+        })
         .send();
-    t.deepEqual(result.sendConfig.method, "POST");
-    t.deepEqual(result.sendConfig.path, "/flower");
+    t.deepEqual(result.sendConfig.method, "DELETE");
+    t.deepEqual(result.sendConfig.path, "/flower/4");
     t.deepEqual(result.sendConfig.query, undefined);
-    t.deepEqual(result.sendConfig.body, body);
+    t.deepEqual(result.sendConfig.body, undefined);
     t.deepEqual(result.sendConfig.header, {});
     t.deepEqual(result.code, undefined);
     t.deepEqual(result.err, undefined);
@@ -73,11 +67,11 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         (result.responseImpl as axios.AxiosResponse<unknown>).status,
-        200
+        204
     );
     t.deepEqual(
         (result.responseImpl as axios.AxiosResponse<unknown>).statusText,
-        "OK"
+        "No Content"
     );
     t.true(
         (result.responseImpl as axios.AxiosResponse<unknown>).config instanceof Object
@@ -85,24 +79,32 @@ tape(__filename, async (t) => {
     t.true(
         (result.responseImpl as axios.AxiosResponse<unknown>).headers instanceof Object
     );
-    t.true(
-        (result.responseImpl as axios.AxiosResponse<unknown>).data instanceof Object
-    );
-    t.deepEqual(result.status, 200);
-    t.deepEqual(result.statusText, "OK");
-    t.deepEqual(result.responseBody.flowerId, BigInt(17));
     t.deepEqual(
-        {
-            ...result.responseBody,
-            flowerId : undefined,
-        },
-        {
-            ...body,
-            flowerId : undefined,
-        }
-    )
+        (result.responseImpl as axios.AxiosResponse<unknown>).data,
+        ""
+    );
+    t.deepEqual(result.status, 204);
+    t.deepEqual(result.statusText, "No Content");
+    t.deepEqual(result.responseBody, undefined);
     t.true(result.responseHeader instanceof Object);
-    t.deepEqual(result.responseHeader.hello, "world");
+
+    {
+        const result = await flowerApi.delete()
+            .setParam({
+                flowerId : BigInt(404),
+            })
+            .on(404, () => {
+                return {
+                    notFound : true,
+                };
+            })
+            .send();
+        if (result.status == 404) {
+            t.deepEqual(result.responseBody.notFound, true);
+        } else {
+            t.fail("Expected 404 status");
+        }
+    }
 
     await new Promise((resolve) => {
         server.close(resolve);

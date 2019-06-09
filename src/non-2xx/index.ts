@@ -57,7 +57,7 @@ export namespace Non2xxUtil {
         DelegateT extends Non2xxDelegate
     > = (
         {
-            [status in (keyof MapT)|StatusT] : (
+            [status in (keyof MapT)|Extract<HttpStatusCodeNon2xx, StatusT>] : (
                 status extends StatusT ?
                 //https://github.com/microsoft/TypeScript/issues/31834
                 (

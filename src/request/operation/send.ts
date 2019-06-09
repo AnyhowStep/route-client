@@ -93,7 +93,7 @@ export async function send<DataT extends RequestData> (data : DataT) : Promise<S
         header,
     };
     return data.sender.send(sendConfig)
-        .then(async (sendResult) => {
+        .then(async (sendResult) : Promise<any> => {
             if (isHttpStatusCode2xx(sendResult.status)) {
                 if (data.route.response == undefined) {
                     return {

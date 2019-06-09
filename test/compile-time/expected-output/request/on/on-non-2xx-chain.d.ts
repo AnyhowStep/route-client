@@ -22,6 +22,9 @@ export declare const req: client.Request<{
     readonly body: undefined;
     readonly header: undefined;
     readonly non2xxDelegates: {
+        304: () => {
+            readonly message: "Not modified";
+        };
         404: () => {
             readonly message: "Overwrites not found";
         };
@@ -31,37 +34,34 @@ export declare const req: client.Request<{
         501: () => {
             readonly message: "Overwrites not implemented";
         };
-        304: () => {
-            readonly message: "Not modified";
-        };
     };
     readonly onTransformBody: undefined;
     readonly onInjectHeader: undefined;
     readonly onTransformResponse: undefined;
 }>;
 export declare const sendResult: Promise<(client.SendResult & {
-    status: client.HttpStatusCode2xx;
+    status: 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226;
     responseBody: {
         description: string;
     };
 }) | (client.SendResult & {
-    status: client.HttpStatusCodeNon2xx.NOT_FOUND | 404;
+    status: 304;
+    responseBody: {
+        readonly message: "Not modified";
+    };
+}) | (client.SendResult & {
+    status: 404;
     responseBody: {
         readonly message: "Overwrites not found";
     };
 }) | (client.SendResult & {
-    status: client.HttpStatusCodeNon2xx.PAYLOAD_TOO_LARGE;
+    status: 413;
     responseBody: {
         readonly message: "Payload too large";
     };
 }) | (client.SendResult & {
-    status: client.HttpStatusCodeNon2xx.NOT_IMPLEMENTED | 501;
+    status: 501;
     responseBody: {
         readonly message: "Overwrites not implemented";
-    };
-}) | (client.SendResult & {
-    status: client.HttpStatusCodeNon2xx.NOT_MODIFIED | 304;
-    responseBody: {
-        readonly message: "Not modified";
     };
 })>;

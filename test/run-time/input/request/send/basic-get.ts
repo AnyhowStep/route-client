@@ -46,52 +46,52 @@ tape(__filename, async (t) => {
         domain : `http://localhost:${port}`,
     });
 
-    const fetchResult = await flowerApi.fetch()
+    const result = await flowerApi.fetch()
         .setParam({
             flowerId : BigInt(4),
         })
         .send();
-    t.deepEqual(fetchResult.sendConfig.method, "GET");
-    t.deepEqual(fetchResult.sendConfig.path, "/flower/4");
-    t.deepEqual(fetchResult.sendConfig.query, undefined);
-    t.deepEqual(fetchResult.sendConfig.body, undefined);
-    t.deepEqual(fetchResult.sendConfig.header, {});
-    t.deepEqual(fetchResult.code, undefined);
-    t.deepEqual(fetchResult.err, undefined);
+    t.deepEqual(result.sendConfig.method, "GET");
+    t.deepEqual(result.sendConfig.path, "/flower/4");
+    t.deepEqual(result.sendConfig.query, undefined);
+    t.deepEqual(result.sendConfig.body, undefined);
+    t.deepEqual(result.sendConfig.header, {});
+    t.deepEqual(result.code, undefined);
+    t.deepEqual(result.err, undefined);
     t.deepEqual(
-        (fetchResult.responseImpl as axios.AxiosResponse<unknown>).config,
-        fetchResult.configImpl
+        (result.responseImpl as axios.AxiosResponse<unknown>).config,
+        result.configImpl
     );
     t.deepEqual(
-        (fetchResult.responseImpl as axios.AxiosResponse<unknown>).request,
-        fetchResult.requestImpl
+        (result.responseImpl as axios.AxiosResponse<unknown>).request,
+        result.requestImpl
     );
     t.true(
-        (fetchResult.responseImpl as axios.AxiosResponse<unknown>).request instanceof Object
+        (result.responseImpl as axios.AxiosResponse<unknown>).request instanceof Object
     );
     t.deepEqual(
-        (fetchResult.responseImpl as axios.AxiosResponse<unknown>).status,
+        (result.responseImpl as axios.AxiosResponse<unknown>).status,
         200
     );
     t.deepEqual(
-        (fetchResult.responseImpl as axios.AxiosResponse<unknown>).statusText,
+        (result.responseImpl as axios.AxiosResponse<unknown>).statusText,
         "OK"
     );
     t.true(
-        (fetchResult.responseImpl as axios.AxiosResponse<unknown>).config instanceof Object
+        (result.responseImpl as axios.AxiosResponse<unknown>).config instanceof Object
     );
     t.true(
-        (fetchResult.responseImpl as axios.AxiosResponse<unknown>).headers instanceof Object
+        (result.responseImpl as axios.AxiosResponse<unknown>).headers instanceof Object
     );
     t.true(
-        (fetchResult.responseImpl as axios.AxiosResponse<unknown>).data instanceof Object
+        (result.responseImpl as axios.AxiosResponse<unknown>).data instanceof Object
     );
-    t.deepEqual(fetchResult.status, 200);
-    t.deepEqual(fetchResult.statusText, "OK");
-    t.deepEqual(fetchResult.responseBody.flowerId, BigInt(4));
-    t.deepEqual(fetchResult.responseBody.name, "Rose");
-    t.true(fetchResult.responseBody.wateredAt instanceof Date);
-    t.true(fetchResult.responseHeader instanceof Object);
+    t.deepEqual(result.status, 200);
+    t.deepEqual(result.statusText, "OK");
+    t.deepEqual(result.responseBody.flowerId, BigInt(4));
+    t.deepEqual(result.responseBody.name, "Rose");
+    t.true(result.responseBody.wateredAt instanceof Date);
+    t.true(result.responseHeader instanceof Object);
 
     await new Promise((resolve) => {
         server.close(resolve);
