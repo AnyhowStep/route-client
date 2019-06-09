@@ -13,11 +13,11 @@ const fields = tm.fields({
 });
 const flower = tm.object(fields);
 const FlowerApi = toAxiosApi({
-    fetch : route()
+    create : route()
         .append("/flower")
-        .appendParam("flowerId", /\d+/)
-        .setParam(tm.object(
-            fields.flowerId
+        .setBody(tm.object(
+            fields.name,
+            fields.wateredAt,
         ))
         .setResponse(flower),
 });
@@ -26,14 +26,14 @@ tape(__filename, async (t) => {
     const server = await new Promise<http.Server>((resolve) => {
         const app = express();
         app.use(express.json());
-        app.get("/flower/:flowerId(\\d+)", (req, res) => {
-            const flowerId = fields.flowerId("req.params.flowerId", req.params.flowerId);
+        app.post("/flower", (req, res) => {
+            const body = FlowerApi.routes.create.body("req.body", req.body);
+            res.setHeader("hello", "world");
             res.json(flower.mapMappable(
                 "response",
                 {
-                    flowerId : flowerId.toString(),
-                    name : "Rose",
-                    wateredAt : new Date(),
+                    flowerId : 17,
+                    ...body,
                 }
             ));
         });
@@ -46,15 +46,17 @@ tape(__filename, async (t) => {
         domain : `http://localhost:${port}`,
     });
 
-    const fetchResult = await flowerApi.fetch()
-        .setParam({
-            flowerId : BigInt(4),
-        })
+    const body = {
+        name : "Orchid",
+        wateredAt : new Date(),
+    };
+    const fetchResult = await flowerApi.create()
+        .setBody(body)
         .send();
-    t.deepEqual(fetchResult.sendConfig.method, "GET");
-    t.deepEqual(fetchResult.sendConfig.path, "/flower/4");
+    t.deepEqual(fetchResult.sendConfig.method, "POST");
+    t.deepEqual(fetchResult.sendConfig.path, "/flower");
     t.deepEqual(fetchResult.sendConfig.query, undefined);
-    t.deepEqual(fetchResult.sendConfig.body, undefined);
+    t.deepEqual(fetchResult.sendConfig.body, body);
     t.deepEqual(fetchResult.sendConfig.header, {});
     t.deepEqual(fetchResult.code, undefined);
     t.deepEqual(fetchResult.err, undefined);
@@ -88,10 +90,19 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(fetchResult.status, 200);
     t.deepEqual(fetchResult.statusText, "OK");
-    t.deepEqual(fetchResult.responseBody.flowerId, BigInt(4));
-    t.deepEqual(fetchResult.responseBody.name, "Rose");
-    t.true(fetchResult.responseBody.wateredAt instanceof Date);
+    t.deepEqual(fetchResult.responseBody.flowerId, BigInt(17));
+    t.deepEqual(
+        {
+            ...fetchResult.responseBody,
+            flowerId : undefined,
+        },
+        {
+            ...body,
+            flowerId : undefined,
+        }
+    )
     t.true(fetchResult.responseHeader instanceof Object);
+    t.deepEqual(fetchResult.responseHeader.hello, "world");
 
     await new Promise((resolve) => {
         server.close(resolve);

@@ -58,7 +58,7 @@ export async function send<DataT extends RequestData> (data : DataT) : Promise<S
 
     const rawBody = (data.route.body == undefined) ?
         undefined :
-        data.route.body(`${debugName} : body`, data.query);
+        data.route.body(`${debugName} : body`, data.body);
 
     const body = (data.onTransformBody == undefined) ?
         rawBody :
