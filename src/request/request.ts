@@ -19,24 +19,62 @@ import {AssertCanGetPath, getPath, SendResultOf} from "./query";
 
 export interface TransformBodyDelegate<DataT extends RequestData> {
     //May return a Promise<>
-    (body : rd.RouteUtil.ServerBody<DataT["route"]>, req : SendableRequestData<DataT>) : unknown;
+    (
+        body : rd.RouteUtil.ServerBody<DataT["route"]>,
+        //Copy-paste of `SendableRequestData<DataT>`
+        //to make generated .d.ts file easier to read
+        req : {
+            readonly route  : DataT["route"];
+            readonly sender : DataT["sender"];
+
+            readonly param  : rd.RouteUtil.ClientExpectedParam<DataT["route"]>;
+            readonly query  : rd.RouteUtil.ClientExpectedQuery<DataT["route"]>;
+            readonly body   : rd.RouteUtil.ClientExpectedBody<DataT["route"]>;
+            readonly header : rd.RouteUtil.ClientExpectedHeader<DataT["route"]>;
+        }
+    ) : unknown;
 }
 export interface InjectHeaderDelegate<DataT extends RequestData> {
     //May return a Promise<>
-    (req : SendableRequestData<DataT>) : (
+    (
+        //Copy-paste of `SendableRequestData<DataT>`
+        //to make generated .d.ts file easier to read
+        req : {
+            readonly route  : DataT["route"];
+            readonly sender : DataT["sender"];
+
+            readonly param  : rd.RouteUtil.ClientExpectedParam<DataT["route"]>;
+            readonly query  : rd.RouteUtil.ClientExpectedQuery<DataT["route"]>;
+            readonly body   : rd.RouteUtil.ClientExpectedBody<DataT["route"]>;
+            readonly header : rd.RouteUtil.ClientExpectedHeader<DataT["route"]>;
+        }
+    ) : (
         | { [k : string] : unknown }
         | Promise<{ [k : string] : unknown }>
     );
 }
 export interface TransformResponseDelegate<DataT extends RequestData> {
     //May return a Promise<>
-    (sendResult : SendResult, req : SendableRequestData<DataT>) : (
+    (
+        sendResult : SendResult,
+        //Copy-paste of `SendableRequestData<DataT>`
+        //to make generated .d.ts file easier to read
+        req : {
+            readonly route  : DataT["route"];
+            readonly sender : DataT["sender"];
+
+            readonly param  : rd.RouteUtil.ClientExpectedParam<DataT["route"]>;
+            readonly query  : rd.RouteUtil.ClientExpectedQuery<DataT["route"]>;
+            readonly body   : rd.RouteUtil.ClientExpectedBody<DataT["route"]>;
+            readonly header : rd.RouteUtil.ClientExpectedHeader<DataT["route"]>;
+        }
+    ) : (
         | rd.RouteUtil.ServerMappableResponse<DataT["route"]>
         | Promise<rd.RouteUtil.ServerMappableResponse<DataT["route"]>>
     );
 }
 
-export interface SendableRequestData<DataT extends RequestData> {
+export interface SendableRequestData<DataT extends Pick<RequestData, "route"|"sender">> {
     readonly route  : DataT["route"];
     readonly sender : DataT["sender"];
 
