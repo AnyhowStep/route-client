@@ -1,0 +1,16 @@
+[
+  {
+    "messageText": "The 'this' context of type 'Request<{ readonly route: Route<DefaultRouteData>; readonly sender: ISender; readonly param: undefined; readonly query: undefined; readonly body: undefined; readonly header: undefined; readonly non2xxDelegates: {}; readonly onTransformBody: undefined; readonly onInjectHeader: undefined; readonly onTransformResponse:...' is not assignable to method's 'this' of type '[\"This route has no param\"]'.",
+    "code": 2684,
+    "category": 1,
+    "length": 68,
+    "start": 89
+  },
+  {
+    "messageText": "The 'this' context of type 'Request<{ readonly route: Route<DefaultRouteData>; readonly sender: ISender; readonly param: undefined; readonly query: undefined; readonly body: undefined; readonly header: undefined; readonly non2xxDelegates: {}; readonly onTransformBody: undefined; readonly onInjectHeader: undefined; readonly onTransformResponse:...' is not assignable to method's 'this' of type '[\"This route has no param\"]'.",
+    "code": 2684,
+    "category": 1,
+    "length": 68,
+    "start": 184
+  }
+]
