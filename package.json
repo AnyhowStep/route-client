@@ -11,15 +11,17 @@
     "accept-compile-time": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-actual.ts",
     "accept-one": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-one.ts",
     "test-compile-time-interactive": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/interactive.ts",
-    "test-run-time": "ts-node -P ./test/run-time/tsconfig.json -r ./test/run-time/tape-stream.ts ./test/run-time/runner.ts",
+    "test-run-time": "ts-node -P ./test/run-time/tsconfig.json -r ./test/run-time/tape-stream.ts -r ./test/run-time/bigint-to-json.ts ./test/run-time/runner.ts",
     "sanity-check": "(npm run rebuild) && (npm run test-compile-time) && (npm run test-run-time)"
   },
   "author": "anyhowstep",
   "license": "MIT",
   "devDependencies": {
     "@types/diff": "^4.0.2",
+    "@types/express": "^4.17.0",
     "@types/tape": "^4.2.33",
     "diff": "^4.0.1",
+    "express": "^4.17.1",
     "tape": "^4.10.2",
     "ts-node": "^8.2.0",
     "typescript": "^3.5.1"
