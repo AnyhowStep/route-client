@@ -208,21 +208,21 @@ export class Request<DataT extends RequestData> {
         return new Request(on(this, status as StatusT, delegate));
     }
 
-    setOnTransformBody<OnTransformBodyT extends TransformBodyDelegate<DataT>> (
+    setOnTransformBody<OnTransformBodyT extends TransformBodyDelegate<DataT>|undefined> (
         onTransformBody : OnTransformBodyT
     ) : Request<SetOnTransformBody<DataT, OnTransformBodyT>> {
         return new Request(
             setOnTransformBody<DataT, OnTransformBodyT>(this as unknown as DataT, onTransformBody)
         );
     }
-    setOnInjectHeader<OnInjectHeaderT extends InjectHeaderDelegate<DataT>> (
+    setOnInjectHeader<OnInjectHeaderT extends InjectHeaderDelegate<DataT>|undefined> (
         onInjectHeader : OnInjectHeaderT
     ) : Request<SetOnInjectHeader<DataT, OnInjectHeaderT>> {
         return new Request(
             setOnInjectHeader<DataT, OnInjectHeaderT>(this as unknown as DataT, onInjectHeader)
         );
     }
-    setOnTransformResponse<OnTransformResponseT extends TransformResponseDelegate<DataT>> (
+    setOnTransformResponse<OnTransformResponseT extends TransformResponseDelegate<DataT>|undefined> (
         onTransformResponse : OnTransformResponseT
     ) : Request<SetOnTransformResponse<DataT, OnTransformResponseT>> {
         return new Request(

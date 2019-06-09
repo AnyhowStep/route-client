@@ -123,7 +123,7 @@ export async function send<DataT extends RequestData> (data : DataT) : Promise<S
             } else {
                 const non2xxDelegate = data.non2xxDelegates[sendResult.status as HttpStatusCodeNon2xx];
                 if (non2xxDelegate == undefined) {
-                    const err = new Error(`Unhandled HTTP status code ${sendResult.status} ${sendResult.statusText} ${sendResult.code}`);
+                    const err = new Error(`Unhandled HTTP status code ${sendResult.status}, ${sendResult.statusText}, ${sendResult.code}`);
                     (err as any).sendResult = sendResult;
                     const sendResultErrStack : string = (
                         sendResult.err instanceof Object &&

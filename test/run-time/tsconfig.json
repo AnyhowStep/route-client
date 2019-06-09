@@ -7,7 +7,7 @@
         "experimentalDecorators": true
     },
     "include" : [
-        "./bigint-polyfill.ts",
+        "./bigint-to-json.ts",
         "./runner.ts",
         "./tape-stream.ts",
         "./util.ts"

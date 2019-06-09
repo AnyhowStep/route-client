@@ -2,7 +2,7 @@ import {RequestData, TransformBodyDelegate} from "../request";
 
 export type SetOnTransformBody<
     DataT extends RequestData,
-    OnTransformBodyT extends TransformBodyDelegate<DataT>
+    OnTransformBodyT extends TransformBodyDelegate<DataT>|undefined
 > = (
     {
         readonly route  : DataT["route"];
@@ -22,7 +22,7 @@ export type SetOnTransformBody<
 );
 export function setOnTransformBody<
     DataT extends RequestData,
-    OnTransformBodyT extends TransformBodyDelegate<DataT>
+    OnTransformBodyT extends TransformBodyDelegate<DataT>|undefined
 > (
     data : DataT,
     onTransformBody : OnTransformBodyT

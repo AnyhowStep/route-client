@@ -2,7 +2,7 @@ import {RequestData, TransformResponseDelegate} from "../request";
 
 export type SetOnTransformResponse<
     DataT extends RequestData,
-    OnTransformResponseT extends TransformResponseDelegate<DataT>
+    OnTransformResponseT extends TransformResponseDelegate<DataT>|undefined
 > = (
     {
         readonly route  : DataT["route"];
@@ -22,7 +22,7 @@ export type SetOnTransformResponse<
 );
 export function setOnTransformResponse<
     DataT extends RequestData,
-    OnTransformResponseT extends TransformResponseDelegate<DataT>
+    OnTransformResponseT extends TransformResponseDelegate<DataT>|undefined
 > (
     data : DataT,
     onTransformResponse : OnTransformResponseT

@@ -2,7 +2,7 @@ import {RequestData, InjectHeaderDelegate} from "../request";
 
 export type SetOnInjectHeader<
     DataT extends RequestData,
-    OnInjectHeaderT extends InjectHeaderDelegate<DataT>
+    OnInjectHeaderT extends InjectHeaderDelegate<DataT>|undefined
 > = (
     {
         readonly route  : DataT["route"];
@@ -22,7 +22,7 @@ export type SetOnInjectHeader<
 );
 export function setOnInjectHeader<
     DataT extends RequestData,
-    OnInjectHeaderT extends InjectHeaderDelegate<DataT>
+    OnInjectHeaderT extends InjectHeaderDelegate<DataT>|undefined
 > (
     data : DataT,
     onInjectHeader : OnInjectHeaderT
