@@ -303,10 +303,10 @@ flowerApi.paginate()
 
 ### `AxiosSender`, `ISender`
 
-An `ISender` performs the actual network request and receives the response.
+An [`ISender`](src/sender/sender.ts) performs the actual network request and receives the response.
 
 This package comes with a single implementation of `ISender`
-that uses [`axios`](https://github.com/axios/axios) and is called `AxiosSender`.
+that uses [`axios`](https://github.com/axios/axios) and is called [`AxiosSender`](src/sender/axios-sender.ts).
 
 You may create your own senders by implementing `ISender`.
 
@@ -318,7 +318,7 @@ The function `request(route, sender)` takes a `route` declared with the
 [`route-declaration`](https://github.com/anyhowstep/route-declaration) package
 and a sender implementing `ISender`.
 
-It returns a `Request` class.
+It returns a [`Request`](src/request/request.ts) class.
 
 The `Request` class is a request builder that lets you
 set all the necessary param, query, body, header values
@@ -327,9 +327,13 @@ before calling `.send()` to perform the network request.
 The `Request` class also lets you specify error handling for
 specific http status codes with the `.on()` method.
 
+See [these tests](test/run-time/input/request/send) for more details.
+
 -----
 
 ### `HttpStatusCode`, `HttpStatusCode2xx`, `HttpStatusCodeNon2xx`
+
+Enums that contain the varieous HTTP status codes.
 
 See [`http-status-code.ts`](src/http-status-code.ts) for more details.
 
@@ -337,25 +341,95 @@ See [`http-status-code.ts`](src/http-status-code.ts) for more details.
 
 ### `toAxiosApi()`, `toApi()`
 
-(TODO)
+Instead of calling `request(route, sender)` repeatedly, [`toApi()`](src/api/api.ts)
+and [`toAxiosApi()`](src/api/axios-api.ts) may be used to aggregate
+route declarations, and an `ISender` into one class.
+
+```ts
+declare const axiosSenderArgs : AxiosSenderArgs;
+const sender = new AxiosSender(axiosSenderArgs);
+//This is tiresome
+request(createRoute, sender);
+request(fetchRoute, sender);
+request(updateRoute, sender);
+request(deleteRoute, sender);
+
+//More set-up is required here.
+const FlowerApi = toAxiosApi({
+    create : createRoute,
+    fetch : fetchRoute,
+    update : updateRoute,
+    delete : deleteRoute,
+});
+const flowerApi = new FlowerApi(axiosSenderArgs);
+//However, each API call is now shorter.
+flowerApi.create();
+flowerApi.fetch();
+flowerApi.update();
+flowerApi.delete();
+```
 
 -----
 
 ### `TransformBodyDelegate`
 
-(TODO)
+You may wish to use JS objects when setting the body of your network request.
+
+However, the server implementing the API endpoint may be expecting
+`application/x-www-form-urlencoded`.
+
+With a `TransformBodyDelegate`, you can still use JS objects
+when building your request.
+
+The `TransformBodyDelegate` will be invoked
+to transform the JS object into the `application/x-www-form-urlencoded`
+format **before** sending the request.
+
+See `Request.setOnTransformBody()` for more details.
+Calling this will apply the `TransformBodyDelegate` for that one
+network request.
+
+Also see `AxiosApiArgs.onTransformBody`.
+Setting this property will apply the `TransformBodyDelegate`
+to all requests made with the `AxiosApi` instance.
+
+Using `AxiosApiArgs.onTransformBody` is the recommended way to
+use this feature as it requires less boilerplate, overall.
+
+See [this test](test/run-time/input/api/axios-api/set-on-transform-body/basic-post.ts) for more details.
 
 -----
 
 ### `InjectHeaderDelegate`
 
-(TODO)
+Your API may require an `api-key` header for all network requests.
+Having to set the header value on all requests might be too much effort.
+
+Using `AxiosApiArgs.onInjectHeader`, you can apply a default
+set of header keys and values to all requests.
+
+See [this test](test/run-time/input/api/axios-api/set-on-inject-header/basic-get.ts) for more details.
 
 -----
 
 ### `TransformResponseDelegate`
 
-(TODO)
+You may wish to work with JS objects when receiving a network response.
+
+However, the server implementing the API endpoint might only send
+responses in XML, or binary format.
+
+With a `TransformResponseDelegate`, you can still use JS objects
+after receiving a response.
+
+The `TransformResponseDelegate` will be invoked
+to transform the response into a JS object
+**before** applying the response mapper to it.
+
+`AxiosApiArgs.onTransformResponse` is the recommended way to use
+this feature.
+
+See [this test](test/run-time/input/api/axios-api/set-on-transform-response/basic-get.ts) for more details.
 
 -----
 
