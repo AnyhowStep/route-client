@@ -25,7 +25,7 @@ export type AxiosApi<MapT extends RouteMap, ArgsT extends AxiosApiArgs> = (
         );
     }
     & {
-        [routeName in Exclude<Extract<keyof MapT, string>, "sender"|"routes">] : (
+        [routeName in Exclude<Extract<keyof MapT, string>, "sender"|"routes"|"onTransformBody"|"onInjectHeader"|"onTransformResponse">] : (
             () => Request<{
                 readonly route : MapT[routeName];
                 readonly sender : AxiosSender;
@@ -158,6 +158,12 @@ export function toAxiosApi<MapT extends RouteMap> (map : MapT) : AxiosApiConstru
     }
     for (let routeName in map) {
         if (!map.hasOwnProperty(routeName)) {
+            continue;
+        }
+        if (routeName == "sender" || routeName == "routes") {
+            continue;
+        }
+        if (routeName == "onTransformBody" || routeName == "onInjectHeader" || routeName == "onTransformResponse") {
             continue;
         }
         (AxiosApiResult.prototype as any)[routeName] = function (this : AxiosApiResult<any>) {

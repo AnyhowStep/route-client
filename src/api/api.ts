@@ -36,6 +36,9 @@ export function toApi<MapT extends RouteMap> (map : MapT) : ApiConstructor<MapT>
         if (!map.hasOwnProperty(routeName)) {
             continue;
         }
+        if (routeName == "sender" || routeName == "routes") {
+            continue;
+        }
         (ApiResult.prototype as any)[routeName] = function (this : ApiResult<ISender>) {
             return request(map[routeName] as any, this.sender);
         };
