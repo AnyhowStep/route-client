@@ -8,6 +8,17 @@ Maps/validates incoming response data during compile-time and run-time.
 
 -----
 
+### Goals
+
++ Compile-time type safety
+
+  Using `route-declaration`, you may build your requests and have
+  TypeScript check it during compile-time and give helpful error messages.
+
+(TODO: More goals)
+
+-----
+
 ### Installation
 
 ```
@@ -290,15 +301,37 @@ flowerApi.paginate()
 
 -----
 
-### `Request`
+### `AxiosSender`, `ISender`
 
-(TODO)
+An `ISender` performs the actual network request and receives the response.
+
+This package comes with a single implementation of `ISender`
+that uses [`axios`](https://github.com/axios/axios) and is called `AxiosSender`.
+
+You may create your own senders by implementing `ISender`.
+
+-----
+
+### `Request`, `request()`
+
+The function `request(route, sender)` takes a `route` declared with the
+[`route-declaration`](https://github.com/anyhowstep/route-declaration) package
+and a sender implementing `ISender`.
+
+It returns a `Request` class.
+
+The `Request` class is a request builder that lets you
+set all the necessary param, query, body, header values
+before calling `.send()` to perform the network request.
+
+The `Request` class also lets you specify error handling for
+specific http status codes with the `.on()` method.
 
 -----
 
 ### `HttpStatusCode`, `HttpStatusCode2xx`, `HttpStatusCodeNon2xx`
 
-(TODO)
+See [`http-status-code.ts`](src/http-status-code.ts) for more details.
 
 -----
 
@@ -308,7 +341,19 @@ flowerApi.paginate()
 
 -----
 
-### `AxiosSender`, `ISender`
+### `TransformBodyDelegate`
+
+(TODO)
+
+-----
+
+### `InjectHeaderDelegate`
+
+(TODO)
+
+-----
+
+### `TransformResponseDelegate`
 
 (TODO)
 
