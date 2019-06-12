@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "axios": "^0.19.0",
-    "route-declaration": "^0.3.0",
+    "route-declaration": "^0.3.1",
     "type-mapping": "^1.4.0"
   }
 }
