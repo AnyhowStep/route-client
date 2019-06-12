@@ -56,13 +56,17 @@ export async function send<DataT extends RequestData> (data : DataT) : Promise<S
         debugName += `?${JSON.stringify(query)}`;
     }
 
-    const rawBody = (data.route.body == undefined) ?
-        undefined :
-        data.route.body(`${debugName} : body`, data.body);
-
-    const body = (data.onTransformBody == undefined) ?
-        rawBody :
-        await data.onTransformBody(rawBody, data);
+    let body : any = undefined;
+    if (data.route.body == undefined) {
+        body = (data.onTransformBody == undefined) ?
+            undefined :
+            await data.onTransformBody({}, data);
+    } else {
+        const rawBody = data.route.body(`${debugName} : body`, data.body);
+        body = (data.onTransformBody == undefined) ?
+            rawBody :
+            await data.onTransformBody(rawBody, data);
+    }
 
     //Headers are special
     const injectedHeader = (data.onInjectHeader == undefined) ?

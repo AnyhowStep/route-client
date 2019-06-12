@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 import * as rd from "route-declaration";
 import {SendResult, ISender} from "../sender";
 import {HttpStatusCodeNon2xx} from "../http-status-code";
@@ -20,7 +21,13 @@ import {AssertCanGetPath, getPath, SendResultOf} from "./query";
 export interface TransformBodyDelegate<DataT extends RequestData> {
     //May return a Promise<>
     (
-        body : rd.RouteUtil.ServerBody<DataT["route"]>,
+        //Modification of,
+        //rd.RouteUtil.ServerBody<DataT["route"]>,
+        body : (
+            DataT["route"]["body"] extends tm.AnySafeMapper ?
+            tm.OutputOf<DataT["route"]["body"]> :
+            undefined
+        ),
         //Copy-paste of `SendableRequestData<DataT>`
         //to make generated .d.ts file easier to read
         req : {
