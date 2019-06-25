@@ -1,28 +1,16 @@
 import * as rd from "route-declaration";
 import {AxiosSender, AxiosSenderArgs, SendResult} from "../sender";
-import {request, Request} from "../request";
+import {request, Request, TransformBodyDelegate, InjectHeaderDelegate, TransformResponseDelegate} from "../request";
 import {RouteMap} from "./api";
 
-export type AxiosApi<MapT extends RouteMap, ArgsT extends AxiosApiArgs> = (
+export type AxiosApi<MapT extends RouteMap> = (
     & {
         readonly sender : AxiosSender;
         readonly routes : MapT;
 
-        readonly onTransformBody : (
-            "onTransformBody" extends keyof ArgsT ?
-            ArgsT["onTransformBody"] :
-            undefined
-        );
-        readonly onInjectHeader : (
-            "onInjectHeader" extends keyof ArgsT ?
-            ArgsT["onInjectHeader"] :
-            undefined
-        );
-        readonly onTransformResponse : (
-            "onTransformResponse" extends keyof ArgsT ?
-            ArgsT["onTransformResponse"] :
-            undefined
-        );
+        readonly onTransformBody : undefined|TransformBodyDelegate<any>;
+        readonly onInjectHeader : undefined|InjectHeaderDelegate<any>;
+        readonly onTransformResponse : undefined|TransformResponseDelegate<any>;
     }
     & {
         [routeName in Exclude<Extract<keyof MapT, string>, "sender"|"routes"|"onTransformBody"|"onInjectHeader"|"onTransformResponse">] : (
@@ -37,21 +25,9 @@ export type AxiosApi<MapT extends RouteMap, ArgsT extends AxiosApiArgs> = (
 
                 readonly non2xxDelegates : {};
 
-                readonly onTransformBody : (
-                    "onTransformBody" extends keyof ArgsT ?
-                    ArgsT["onTransformBody"] :
-                    undefined
-                );
-                readonly onInjectHeader : (
-                    "onInjectHeader" extends keyof ArgsT ?
-                    ArgsT["onInjectHeader"] :
-                    undefined
-                );
-                readonly onTransformResponse : (
-                    "onTransformResponse" extends keyof ArgsT ?
-                    ArgsT["onTransformResponse"] :
-                    undefined
-                );
+                readonly onTransformBody : undefined|TransformBodyDelegate<any>;
+                readonly onInjectHeader : undefined|InjectHeaderDelegate<any>;
+                readonly onTransformResponse : undefined|TransformResponseDelegate<any>;
             }>
         );
     }
@@ -121,33 +97,21 @@ export interface AxiosApiArgs extends AxiosSenderArgs {
     );
 }
 export interface AxiosApiConstructor<MapT extends RouteMap> {
-    new <ArgsT extends AxiosApiArgs>(args : ArgsT) : AxiosApi<MapT, ArgsT>;
+    new (args : AxiosApiArgs) : AxiosApi<MapT>;
     readonly routes : MapT;
 };
 export function toAxiosApi<MapT extends RouteMap> (map : MapT) : AxiosApiConstructor<MapT> {
-    class AxiosApiResult<ArgsT extends AxiosApiArgs> {
+    class AxiosApiResult {
         static readonly routes : MapT = map;
 
         readonly sender : AxiosSender;
         readonly routes : MapT;
 
-        readonly onTransformBody : (
-            "onTransformBody" extends keyof ArgsT ?
-            ArgsT["onTransformBody"] :
-            undefined
-        );
-        readonly onInjectHeader : (
-            "onInjectHeader" extends keyof ArgsT ?
-            ArgsT["onInjectHeader"] :
-            undefined
-        );
-        readonly onTransformResponse : (
-            "onTransformResponse" extends keyof ArgsT ?
-            ArgsT["onTransformResponse"] :
-            undefined
-        );
+        readonly onTransformBody : any;
+        readonly onInjectHeader : any;
+        readonly onTransformResponse : any;
 
-        constructor (args : ArgsT) {
+        constructor (args : AxiosApiArgs) {
             this.sender = new AxiosSender(args);
             this.routes = map;
 
@@ -166,7 +130,7 @@ export function toAxiosApi<MapT extends RouteMap> (map : MapT) : AxiosApiConstru
         if (routeName == "onTransformBody" || routeName == "onInjectHeader" || routeName == "onTransformResponse") {
             continue;
         }
-        (AxiosApiResult.prototype as any)[routeName] = function (this : AxiosApiResult<any>) {
+        (AxiosApiResult.prototype as any)[routeName] = function (this : AxiosApiResult) {
             return request(map[routeName] as any, this.sender)
                 .setOnTransformBody(this.onTransformBody)
                 .setOnInjectHeader(this.onInjectHeader)
