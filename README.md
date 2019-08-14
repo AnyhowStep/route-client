@@ -55,10 +55,7 @@ const all = route()
     .append("/flower");
 const one = route()
     .append("/flower")
-    .appendParam("flowerId", /\d+/)
-    .setParam(tm.object(
-        fields.flowerId
-    ));
+    .appendParam(fields.flowerId, /\d+/);
 
 //`FlowerApi` is a class constructor
 const FlowerApi = toAxiosApi({
