@@ -1,6 +1,6 @@
 {
   "name": "route-client",
-  "version": "0.2.2",
+  "version": "0.2.1",
   "description": "Send requests using route-declaration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

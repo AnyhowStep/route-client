@@ -3,17 +3,9 @@ import {AxiosSender, AxiosSenderArgs, SendResult} from "../sender";
 import {request, Request, TransformBodyDelegate, InjectHeaderDelegate, TransformResponseDelegate} from "../request";
 import {RouteMap} from "./api";
 
-export type AxiosApi<MapT extends RouteMap> = (
-    & {
-        readonly sender : AxiosSender;
-        readonly routes : MapT;
-
-        readonly onTransformBody : undefined|TransformBodyDelegate<any>;
-        readonly onInjectHeader : undefined|InjectHeaderDelegate<any>;
-        readonly onTransformResponse : undefined|TransformResponseDelegate<any>;
-    }
-    & {
-        [routeName in Exclude<Extract<keyof MapT, string>, "sender"|"routes"|"onTransformBody"|"onInjectHeader"|"onTransformResponse">] : (
+export type AxiosRequestFactoryMapImpl<MapT extends RouteMap, K extends keyof MapT> =
+    {
+        [routeName in K] : (
             () => Request<{
                 readonly route : MapT[routeName];
                 readonly sender : AxiosSender;
@@ -31,7 +23,28 @@ export type AxiosApi<MapT extends RouteMap> = (
             }>
         );
     }
-);
+;
+export type AxiosRequestFactoryMap<MapT extends RouteMap> =
+    AxiosRequestFactoryMapImpl<
+        MapT,
+        Exclude<
+            Extract<keyof MapT, string>,
+            "sender"|"routes"|"onTransformBody"|"onInjectHeader"|"onTransformResponse"
+        >
+    >
+;
+
+export type AxiosApi<MapT extends RouteMap> =
+    & {
+        readonly sender : AxiosSender;
+        readonly routes : MapT;
+
+        readonly onTransformBody : undefined|TransformBodyDelegate<any>;
+        readonly onInjectHeader : undefined|InjectHeaderDelegate<any>;
+        readonly onTransformResponse : undefined|TransformResponseDelegate<any>;
+    }
+    & AxiosRequestFactoryMap<MapT>
+;
 export interface AxiosApiArgs extends AxiosSenderArgs {
     /**
         Called before sending the request

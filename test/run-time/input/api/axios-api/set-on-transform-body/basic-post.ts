@@ -13,6 +13,9 @@ const fields = tm.fields({
 });
 const flower = tm.object(fields);
 const FlowerApi = toAxiosApi({
+    /**
+     * Creates a flower
+     */
     create : route()
         .append("/flower")
         .setBody(tm.object(

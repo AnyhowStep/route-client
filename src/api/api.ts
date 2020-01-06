@@ -6,17 +6,30 @@ export interface RouteMap {
     [routeName : string] : rd.RouteData;
 }
 
-export type Api<MapT extends RouteMap, SenderT extends ISender> = (
+export type RequestFactoryMapImpl<MapT extends RouteMap, K extends keyof MapT> =
+    {
+        [routeName in K] : (
+            () => NewRequest<MapT[routeName], ISender>
+        );
+    }
+;
+export type RequestFactoryMap<MapT extends RouteMap> =
+    RequestFactoryMapImpl<
+        MapT,
+        Exclude<
+            Extract<keyof MapT, string>,
+            "sender"|"routes"
+        >
+    >
+;
+
+export type Api<MapT extends RouteMap, SenderT extends ISender> =
     & {
         readonly sender : SenderT;
         readonly routes : MapT;
     }
-    & {
-        [routeName in Exclude<Extract<keyof MapT, string>, "sender"|"routes">] : (
-            () => NewRequest<MapT[routeName], ISender>
-        );
-    }
-);
+    & RequestFactoryMap<MapT>
+;
 export interface ApiConstructor<MapT extends RouteMap> {
     new <SenderT extends ISender>(sender : SenderT) : Api<MapT, SenderT>;
     readonly routes : MapT;

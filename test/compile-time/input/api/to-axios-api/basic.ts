@@ -8,7 +8,7 @@ const gem = tm.object({
     name : tm.mysql.varChar(1, 255),
     metadata : tm.stringToJsonObject(),
 });
-export const GemApi = client.toApi({
+export const GemApi = client.toAxiosApi({
     create : route()
         .append("/gem")
         .setBody(tm.object({
@@ -66,7 +66,7 @@ export const GemApi = client.toApi({
             gemId : tm.mysql.bigIntUnsigned(),
         })),
 });
-export const gemApi = new GemApi(null as unknown as client.ISender);
+export const gemApi = new GemApi(null as unknown as client.AxiosApiArgs);
 export const create = gemApi.create();
 export const paginate = gemApi.paginate();
 export const fetch = gemApi.fetch();

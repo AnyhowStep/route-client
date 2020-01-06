@@ -1,5 +1,5 @@
 import * as client from "../../../../../dist";
-export declare const GemApi: client.ApiConstructor<{
+export declare const GemApi: client.AxiosApiConstructor<{
     create: import("route-declaration").Route<{
         readonly method: import("route-declaration").Method.Contextual;
         readonly path: import("route-declaration").Path<never>;
@@ -227,7 +227,7 @@ export declare const GemApi: client.ApiConstructor<{
         readonly response: undefined;
     }>;
 }>;
-export declare const gemApi: client.Api<{
+export declare const gemApi: client.AxiosApi<{
     create: import("route-declaration").Route<{
         readonly method: import("route-declaration").Method.Contextual;
         readonly path: import("route-declaration").Path<never>;
@@ -454,7 +454,7 @@ export declare const gemApi: client.Api<{
         readonly header: undefined;
         readonly response: undefined;
     }>;
-}, client.ISender>;
+}>;
 export declare const create: client.Request<{
     readonly route: import("route-declaration").Route<{
         readonly method: import("route-declaration").Method.Contextual;
@@ -506,15 +506,15 @@ export declare const create: client.Request<{
             name: string;
         }>>;
     }>;
-    readonly sender: client.ISender;
+    readonly sender: client.AxiosSender;
     readonly param: undefined;
     readonly query: undefined;
     readonly body: undefined;
     readonly header: undefined;
     readonly non2xxDelegates: {};
-    readonly onTransformBody: undefined;
-    readonly onInjectHeader: undefined;
-    readonly onTransformResponse: undefined;
+    readonly onTransformBody: client.TransformBodyDelegate<any> | undefined;
+    readonly onInjectHeader: client.InjectHeaderDelegate<any> | undefined;
+    readonly onTransformResponse: client.TransformResponseDelegate<any> | undefined;
 }>;
 export declare const paginate: client.Request<{
     readonly route: import("route-declaration").Route<{
@@ -582,15 +582,15 @@ export declare const paginate: client.Request<{
             };
         }>>;
     }>;
-    readonly sender: client.ISender;
+    readonly sender: client.AxiosSender;
     readonly param: undefined;
     readonly query: undefined;
     readonly body: undefined;
     readonly header: undefined;
     readonly non2xxDelegates: {};
-    readonly onTransformBody: undefined;
-    readonly onInjectHeader: undefined;
-    readonly onTransformResponse: undefined;
+    readonly onTransformBody: client.TransformBodyDelegate<any> | undefined;
+    readonly onInjectHeader: client.InjectHeaderDelegate<any> | undefined;
+    readonly onTransformResponse: client.TransformResponseDelegate<any> | undefined;
 }>;
 export declare const fetch: client.Request<{
     readonly route: import("route-declaration").Route<{
@@ -629,15 +629,15 @@ export declare const fetch: client.Request<{
             name: string;
         }>>;
     }>;
-    readonly sender: client.ISender;
+    readonly sender: client.AxiosSender;
     readonly param: undefined;
     readonly query: undefined;
     readonly body: undefined;
     readonly header: undefined;
     readonly non2xxDelegates: {};
-    readonly onTransformBody: undefined;
-    readonly onInjectHeader: undefined;
-    readonly onTransformResponse: undefined;
+    readonly onTransformBody: client.TransformBodyDelegate<any> | undefined;
+    readonly onInjectHeader: client.InjectHeaderDelegate<any> | undefined;
+    readonly onTransformResponse: client.TransformResponseDelegate<any> | undefined;
 }>;
 export declare const update: client.Request<{
     readonly route: import("route-declaration").Route<{
@@ -694,15 +694,15 @@ export declare const update: client.Request<{
             name: string;
         }>>;
     }>;
-    readonly sender: client.ISender;
+    readonly sender: client.AxiosSender;
     readonly param: undefined;
     readonly query: undefined;
     readonly body: undefined;
     readonly header: undefined;
     readonly non2xxDelegates: {};
-    readonly onTransformBody: undefined;
-    readonly onInjectHeader: undefined;
-    readonly onTransformResponse: undefined;
+    readonly onTransformBody: client.TransformBodyDelegate<any> | undefined;
+    readonly onInjectHeader: client.InjectHeaderDelegate<any> | undefined;
+    readonly onTransformResponse: client.TransformResponseDelegate<any> | undefined;
 }>;
 export declare const del: client.Request<{
     readonly route: import("route-declaration").Route<{
@@ -720,13 +720,13 @@ export declare const del: client.Request<{
         readonly header: undefined;
         readonly response: undefined;
     }>;
-    readonly sender: client.ISender;
+    readonly sender: client.AxiosSender;
     readonly param: undefined;
     readonly query: undefined;
     readonly body: undefined;
     readonly header: undefined;
     readonly non2xxDelegates: {};
-    readonly onTransformBody: undefined;
-    readonly onInjectHeader: undefined;
-    readonly onTransformResponse: undefined;
+    readonly onTransformBody: client.TransformBodyDelegate<any> | undefined;
+    readonly onInjectHeader: client.InjectHeaderDelegate<any> | undefined;
+    readonly onTransformResponse: client.TransformResponseDelegate<any> | undefined;
 }>;
